@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@android:color/darker_gray"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:id="@+id/comment_indicator_space"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:paddingLeft="10dp" />
+
+    <LinearLayout
+        android:id="@+id/comment_indicator_color"
+        android:layout_width="4dp"
+        android:layout_height="match_parent"
+        android:background="@color/blue_500"
+        android:orientation="horizontal" />
+
+    <LinearLayout
+        android:id="@+id/comment_container"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:color/white"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingLeft="10dp"
+            android:paddingTop="10dp">
+
+            <TextView
+                android:id="@+id/comment_author"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#8699b1"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="Dummy_User " />
+
+            <TextView
+                android:id="@+id/post_bullet"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/grey_500"
+                android:textSize="14sp"
+                android:textStyle="bold"
+                tools:text=" • " />
+
+            <TextView
+                android:id="@+id/comment_score"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="#8699b1"
+                android:textSize="12sp"
+                android:textStyle="bold"
+                tools:text="3000" />
+        </LinearLayout>
+
+        <TextView
+            android:id="@+id/comment_body"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:autoLink="web"
+            android:paddingLeft="10dp"
+            android:paddingRight="10dp"
+            android:paddingTop="5dp"
+            android:textSize="16sp"
+            tools:text="Ronaldo is the best player in the world, lol." />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:background="@android:color/darker_gray" />
+    </LinearLayout>
+</LinearLayout>
