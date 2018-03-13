@@ -12,6 +12,7 @@ In action: https://gfycat.com/BlaringRecentDodobird
 <img src="https://imgur.com/Y41pDQM.png" width="216" height="384" /> |
 <img src="https://imgur.com/P0q1XjJ.png" width="216" height="384" />
 
+![Sample Video](https://giant.gfycat.com/BlaringRecentDodobird.webm)
 # Features
 
 * Free and Open Source - no ads/tracking
