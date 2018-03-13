@@ -8,9 +8,13 @@ This app is in alpha mode and is not yet public, but can be downloaded privately
 
 In action: https://gfycat.com/BlaringRecentDodobird
 
-<img src="https://imgur.com/BM5uFAl" width="216" height="384" />
-<img src="https://imgur.com/Y41pDQM" width="216" height="384" />
-<img src="https://imgur.com/P0q1XjJ" width="216" height="384" />
+<img src="https://imgur.com/BM5uFAl.png" width="216" height="384" /> | 
+<img src="https://imgur.com/Y41pDQM.png" width="216" height="384" /> |
+<img src="https://imgur.com/P0q1XjJ.png" width="216" height="384" />
+
+
+![Alt Text](https://thumbs.gfycat.com/BlaringRecentDodobird-max-14mb.gif)
+
 
 # Features
 
