@@ -6,12 +6,12 @@ Lurkit is a Reddit app for interactively browsing top content without having to 
 
 This app is in alpha mode and is not yet public, but can be downloaded privately from the google play store. 
 
-In action: https://gfycat.com/BlaringRecentDodobird
-
+# Screenshots
 <img src="https://imgur.com/BM5uFAl.png" width="216" height="384" /> | 
 <img src="https://imgur.com/Y41pDQM.png" width="216" height="384" /> |
 <img src="https://imgur.com/P0q1XjJ.png" width="216" height="384" />
 
+# In Action
 <img src="/screenshots/InAction.gif">
 
 
