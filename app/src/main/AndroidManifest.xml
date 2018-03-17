@@ -13,13 +13,16 @@
         android:roundIcon="@mipmap/ic_launcher_round"
         android:theme="@style/AppTheme">
         <activity
-            android:name=".activities.MainActivity"
+            android:name=".activities.SplashScreenActivity"
             android:label="@string/app_name">
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
         </activity>
+        <activity
+            android:name=".activities.MainActivity"
+            android:label="@string/title_activity_main" />
         <activity
             android:name=".activities.ExpandedImageView"
             android:label="@string/title_activity_expanded_image_view" />

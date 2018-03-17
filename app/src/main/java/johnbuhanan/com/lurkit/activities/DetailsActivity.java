@@ -65,7 +65,8 @@ public class DetailsActivity extends AppCompatActivity {
 
         RedditCardViewHolder redditCardViewHolder = new RedditCardViewHolder(mHeader);
         redditCardViewHolder.bindViewHolder(getApplicationContext(), redditPost);
-        redditCardViewHolder.mPostDetailsContainer.setOnClickListener(null);
+        redditCardViewHolder.mPostDetailsContainer.setOnClickListener(null); // Remove click
+        redditCardViewHolder.mPostDetailsContainer.setBackground(null); // Remove ripple animation
 
         adapter = new CommentAdapter(getApplicationContext(), new CommentsApi(getApplicationContext(), permalink, new OnCommentsLoadedListener() {
             @Override

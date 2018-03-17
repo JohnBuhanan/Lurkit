@@ -1,0 +1,25 @@
+<?xml version="1.0" encoding="utf-8"?>
+<set xmlns:android="http://schemas.android.com/apk/res/android">
+    <!--Have logo grow and then fade in transition-->
+    <!--<scale-->
+    <!--android:interpolator="@android:anim/accelerate_decelerate_interpolator"-->
+    <!--android:fromXScale="1.0"-->
+    <!--android:toXScale="3"-->
+    <!--android:fromYScale="1.0"-->
+    <!--android:toYScale="3"-->
+    <!--android:pivotX="50%"-->
+    <!--android:pivotY="50%"-->
+    <!--android:fillAfter="false"-->
+    <!--android:duration="2000" />-->
+
+    <scale xmlns:android="http://schemas.android.com/apk/res/android"
+        android:duration="2000"
+        android:fromXScale="1"
+        android:fromYScale="1"
+        android:pivotX="50%"
+        android:pivotY="50%"
+        android:toXScale="2"
+        android:toYScale="2" />
+    <!--android:repeatCount="1"-->
+    <!--android:repeatMode="reverse"-->
+</set>
