@@ -85,9 +85,14 @@ public class RedditCardViewHolder extends RecyclerView.ViewHolder {
     }
 
     private void bindThumbnailType(Context context, RedditPost redditPost) {
-        final String url = redditPost.getUrl();
+        String url = redditPost.getUrl();
         final String domain = redditPost.getDomain();
-        String type = URLConnection.guessContentTypeFromName(url);
+        String type = null;
+            if (url.contains("#")) // URLConnection.guessContentTypeFromName(url); hashtag bug...
+                type = "web";
+            else
+                type = URLConnection.guessContentTypeFromName(url);
+
         final String thumbnail = redditPost.getThumbnail();
 
         mPostThumbnailContainer.setVisibility(View.VISIBLE);

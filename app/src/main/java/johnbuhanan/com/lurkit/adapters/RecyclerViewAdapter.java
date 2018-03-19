@@ -14,16 +14,21 @@ import johnbuhanan.com.lurkit.viewholders.RedditCardViewHolder;
 
 public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     private static Context mContext;
-    private ArrayList<RedditPost> posts;
+    private ArrayList<RedditPost> redditPosts;
     private View view;
 
     public static final int THUMBNAIL_POST_TYPE = 0;
     public static final int SELF_POST_TYPE = 1;
     public static final int LINK_POST_TYPE = 2;
 
-    public RecyclerViewAdapter(Context context, ArrayList<RedditPost> posts) {
+//    public RecyclerViewAdapter(Context context) {
+//        this.mContext = context;
+//        this.redditPosts = new ArrayList<RedditPost>();
+//    }
+
+    public RecyclerViewAdapter(Context context, ArrayList<RedditPost> redditPosts) {
         this.mContext = context;
-        this.posts = posts;
+        this.redditPosts = redditPosts;
     }
 
     @Override
@@ -38,14 +43,20 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
 
     @Override
     public void onBindViewHolder(final RecyclerView.ViewHolder viewHolder, int position) {
-        final RedditPost redditPost = posts.get(position);
+        final RedditPost redditPost = redditPosts.get(position);
 
         // Either RedditCardViewHolder, SelfPostViewHolder, or LinkViewHolder?
         ((RedditCardViewHolder) viewHolder).bindViewHolder(mContext, redditPost);
     }
 
+    public void refreshData(ArrayList<RedditPost> redditPosts) {
+        this.redditPosts.clear();
+        this.redditPosts = redditPosts;
+        notifyDataSetChanged();
+    }
+
     @Override
     public int getItemCount() {
-        return posts.size();
+        return redditPosts.size();
     }
 }

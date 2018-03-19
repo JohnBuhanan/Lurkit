@@ -2,6 +2,7 @@ package johnbuhanan.com.lurkit.api;
 
 import android.content.Context;
 import android.net.Uri;
+import android.os.Handler;
 import android.text.TextUtils;
 
 import com.android.volley.Request;
@@ -20,7 +21,7 @@ import johnbuhanan.com.lurkit.model.RedditPost;
 import johnbuhanan.com.lurkit.network.VolleySingleton;
 
 public class RedditPostsApi {
-    private ArrayList<RedditPost> redditPostArrayList = new ArrayList<RedditPost>();
+    public ArrayList<RedditPost> redditPostArrayList = new ArrayList<RedditPost>();
     private String currentAfter;
     private Context mContext;
     private static final String ALL_PAGE_URL = "https://www.reddit.com/r/all";
@@ -35,7 +36,7 @@ public class RedditPostsApi {
 
     public ArrayList<RedditPost> refreshRedditPosts(RedditPostsFragment.OnRedditPostsLoadedListener onRedditPostsLoadedListener) {
         currentAfter = null;
-        redditPostArrayList = new ArrayList<RedditPost>();
+        redditPostArrayList.clear();
 
         return getNextRedditPosts(onRedditPostsLoadedListener);
     }
@@ -45,6 +46,7 @@ public class RedditPostsApi {
     }
 
     public ArrayList<RedditPost> getNextRedditPosts(final RedditPostsFragment.OnRedditPostsLoadedListener onRedditPostsLoadedListener) {
+
         Uri.Builder builder = Uri.parse(ALL_PAGE_URL).buildUpon();
         builder.appendPath(".json").appendQueryParameter("raw_json", "1");
 
@@ -53,7 +55,7 @@ public class RedditPostsApi {
 
         String url = builder.build().toString();
 
-        JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, (String) null, new Response.Listener<JSONObject>() {
+        final JsonObjectRequest jsonObjectRequest = new JsonObjectRequest(Request.Method.GET, url, (String) null, new Response.Listener<JSONObject>() {
 
             @Override
             public void onResponse(JSONObject response) {
@@ -114,8 +116,9 @@ public class RedditPostsApi {
                         redditPostArrayList.add(post);
                     }
 
-                    if (onRedditPostsLoadedListener != null)
+                    if (onRedditPostsLoadedListener != null) {
                         onRedditPostsLoadedListener.onRedditPostsLoaded(redditPostArrayList);
+                    }
 
                 } catch (JSONException e) {
                     e.printStackTrace();
