@@ -301,11 +301,18 @@ public class ContentType {
         }
     }
 
-    public String formatGifUrl(String s) {
+    public static String formatGifUrl(String s) {
         if (s.endsWith("v") && !s.contains("streamable.com")) {
             s = s.substring(0, s.length() - 1);
         } else if (s.contains("gfycat") && (!s.contains("mp4") && !s.contains("webm"))) {
-            if (s.contains("-size_restricted")) s = s.replace("-size_restricted", "");
+            if (s.contains("-size_restricted")) {
+                s = s.replace("-size_restricted", "");
+            }
+
+            // https://gfycat.com/cajax/get/ShamelessOrderlyIndianspinyloach
+            // https://thumbs.gfycat.com/ShamelessOrderlyIndianspinyloach-mobile.mp4
+            s = s.replace("gfycat", "thumbs.gfycat");
+            s = s + "-mobile.mp4";
         }
         if ((s.contains(".webm") || s.contains(".gif")) && !s.contains(".gifv") && s.contains(
                 "imgur.com")) {

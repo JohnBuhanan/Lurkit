@@ -1,6 +1,7 @@
 package johnbuhanan.com.lurkit.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
@@ -8,9 +9,10 @@ import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
 
@@ -32,7 +34,6 @@ import uk.co.senab.photoview.PhotoViewAttacher;
 
 public class ExpandedImageView extends AppCompatActivity {
 
-    private Toolbar mToolbar;
     private PhotoViewAttacher mPhotoViewAttacher;
     private PhotoView mPhotoView;
     private String imageUrl;
@@ -46,12 +47,11 @@ public class ExpandedImageView extends AppCompatActivity {
                 .setContentView(R.layout.activity_expanded_image_view)
                 .setSwipeBackView(R.layout.swipeback_custom);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
         mPhotoView = (PhotoView) findViewById(R.id.expanded_image);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Back");
+
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.BLACK);
 
         mProgressbar = (ProgressBar) findViewById(R.id.progressbar);
 
@@ -66,7 +66,6 @@ public class ExpandedImageView extends AppCompatActivity {
             @Override
             public void onViewTap(View view, float v, float v1) {
                 finish();
-
             }
         });
     }

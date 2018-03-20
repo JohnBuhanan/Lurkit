@@ -1,20 +1,21 @@
 package johnbuhanan.com.lurkit.activities;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.media.MediaPlayer;
 import android.net.Uri;
 import android.os.AsyncTask;
 import android.os.Bundle;
 import android.os.Environment;
 import android.os.SystemClock;
 import android.support.v7.app.AppCompatActivity;
-import android.support.v7.widget.Toolbar;
-import android.view.Menu;
 import android.view.MenuItem;
 import android.view.View;
-import android.webkit.WebView;
-import android.webkit.WebViewClient;
+import android.view.Window;
+import android.view.WindowManager;
 import android.widget.ProgressBar;
 import android.widget.Toast;
+import android.widget.VideoView;
 
 import com.hannesdorfmann.swipeback.Position;
 import com.hannesdorfmann.swipeback.SwipeBack;
@@ -32,10 +33,8 @@ import johnbuhanan.com.lurkit.model.RedditPost;
 public class GifActivity extends AppCompatActivity {
 
     private String gifUrl;
-    private WebView mGifWebView;
-    private Toolbar mToolbar;
+    private VideoView mGifVideoView;
     private ProgressBar mProgressbar;
-
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -45,32 +44,36 @@ public class GifActivity extends AppCompatActivity {
                 .setContentView(R.layout.activity_gif)
                 .setSwipeBackView(R.layout.swipeback_custom);
 
-        mToolbar = (Toolbar) findViewById(R.id.toolbar);
-        setSupportActionBar(mToolbar);
-        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
-        getSupportActionBar().setDisplayShowHomeEnabled(true);
-        getSupportActionBar().setTitle("Back");
-
         mProgressbar = (ProgressBar) findViewById(R.id.progressbar);
 
+        Window window = getWindow();
+        window.addFlags(WindowManager.LayoutParams.FLAG_DRAWS_SYSTEM_BAR_BACKGROUNDS);
+        window.setStatusBarColor(Color.BLACK);
 
         Bundle bundle = getIntent().getExtras();
         RedditPost redditPost = (RedditPost) bundle.getSerializable("post");
         gifUrl = redditPost.getUrl();
+//        MediaController mediaController = new MediaController(this){
+//            @Override
+//            public void hide() {
+//
+//            }
+//        };
+        mGifVideoView = (VideoView) findViewById(R.id.gif_video_view);
 
+//        mediaController.setAnchorView(mGifVideoView);
+//        mGifVideoView.setMediaController(mediaController);
 
-        mGifWebView = (WebView) findViewById(R.id.gif_webView);
+        mGifVideoView.setOnPreparedListener(new MediaPlayer.OnPreparedListener() {
+            @Override
+            public void onPrepared(MediaPlayer mp) {
+                mp.setLooping(true);
+                mGifVideoView.start();
+            }
+        });
 
-        mGifWebView.getSettings().setLoadsImagesAutomatically(true);
-        mGifWebView.getSettings().setJavaScriptEnabled(true);
-        mGifWebView.setScrollBarStyle(View.SCROLLBARS_INSIDE_OVERLAY);
-        mGifWebView.getSettings().setLoadWithOverviewMode(true);
-        mGifWebView.getSettings().setUseWideViewPort(true);
-        mGifWebView.getSettings().setBuiltInZoomControls(true);
-        mGifWebView.getSettings().setSupportZoom(true);
-        // Configure the client to use when opening URLs
-        mGifWebView.setWebViewClient(new MyBrowser());
-        mGifWebView.loadUrl(gifUrl);
+        Uri uri = Uri.parse(gifUrl); //Declare your url here.
+        mGifVideoView.setVideoURI(uri);
     }
 
     public void onClick(View view) {
@@ -98,15 +101,6 @@ public class GifActivity extends AppCompatActivity {
             case R.id.action_close:
                 finish();
                 break;
-        }
-    }
-
-    // Manages the behavior when URLs are loaded
-    private class MyBrowser extends WebViewClient {
-        @Override
-        public boolean shouldOverrideUrlLoading(WebView view, String url) {
-            view.loadUrl(url);
-            return true;
         }
     }
 

@@ -13,8 +13,7 @@ import android.widget.TextView;
 
 import com.bumptech.glide.Glide;
 
-import java.net.URLConnection;
-
+import johnbuhanan.com.lurkit.ContentType;
 import johnbuhanan.com.lurkit.LaunchActivityClickListener;
 import johnbuhanan.com.lurkit.R;
 import johnbuhanan.com.lurkit.activities.DetailsActivity;
@@ -87,43 +86,56 @@ public class RedditCardViewHolder extends RecyclerView.ViewHolder {
     private void bindThumbnailType(Context context, RedditPost redditPost) {
         String url = redditPost.getUrl();
         final String domain = redditPost.getDomain();
-        String type = null;
-            if (url.contains("#")) // URLConnection.guessContentTypeFromName(url); hashtag bug...
-                type = "web";
-            else
-                type = URLConnection.guessContentTypeFromName(url);
+        ContentType.Type type = ContentType.getContentType(url);
 
         final String thumbnail = redditPost.getThumbnail();
 
         mPostThumbnailContainer.setVisibility(View.VISIBLE);
         Glide.with(context).load(thumbnail).into(mPostThumbnail);
 
-        if (type == null)
-            type = "web";
-
-        // I can't tell if an imgur resource is going to be a .jpg or .png
-        boolean isImage = type.equals("image/jpeg") || type.equals("image/png");// || (url.contains("imgur") && !url.contains("\\a\\"));
-
         //handle images
 //        "image/jpeg"
-        if (url.contains(".gif") || url.contains("gfy")) { //handle gif content
-            mPostThumbnailDecorator.setVisibility(View.VISIBLE);
-            mPostThumbnailDecorator.setText("[Gif]");
-
-            mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, GifActivity.class));
-            //handle youtube content
-        } else if (isImage) {
-            mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, ExpandedImageView.class));
-        } else if (domain.equals("youtube.com") || domain.equals("youtu.be") || domain.equals("m.youtube.com")) {
-            mPostThumbnailDecorator.setVisibility(View.VISIBLE);
-            mPostThumbnailDecorator.setText("[YouTube]");
-
-            mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, YoutubeActivity.class));
-        } else {
-            mPostThumbnailLink.setVisibility(View.VISIBLE);
-            mPostThumbnailLink.setText(redditPost.getUrl());
-
-            mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, WebActivity.class));
+        switch (type) {
+            // https://gfycat.com/cajax/get/ShamelessOrderlyIndianspinyloach
+            // https://gfycat.com/GrimPresentIguanodon
+            // https://i.imgur.com/oj3A9sz.gifv
+            // https://i.imgur.com/7RVYFUW.gifv
+            // http://i.imgur.com/R6asyTJ.gifv
+            // https://i.imgur.com/m7ZCpUb.gifv
+            case GIF:
+//                if (ContentType.isImgurHash(url)) {
+//                    url = url.replace(".gifv", ".gif");
+//                }
+                url = ContentType.formatGifUrl(url);
+                redditPost.setUrl(url);
+                mPostThumbnailDecorator.setVisibility(View.VISIBLE);
+                mPostThumbnailDecorator.setText("[Gif]");
+                mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, GifActivity.class));
+                break;
+            case IMGUR: // TODO: https://imgur.com/c516wqm  (I can add either .jpg or .png to the end to make this work...)
+                url = url + ".png";
+                redditPost.setUrl(url);
+                // Fall through to image now...
+            case IMAGE:
+                mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, ExpandedImageView.class));
+                break;
+            case VIDEO:
+                mPostThumbnailDecorator.setVisibility(View.VISIBLE);
+                mPostThumbnailDecorator.setText("[YouTube]");
+                mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, YoutubeActivity.class));
+                break;
+            case LINK:
+            case ALBUM: // TODO: https://imgur.com/a/wSHbH
+            case VREDDIT_REDIRECT: // TODO: https://v.redd.it/vnk25yemekm01    https://v.redd.it/0w4vt4ov4pm01
+            case REDDIT: // TODO: https://www.reddit.com/r/leagueoflegends/comments/85gq68/tiebreaker_4_na_lcs_2018_spring_week_9_postmatch/
+            case STREAMABLE: // TODO: https://streamable.com/3zkk0
+                mPostThumbnailLink.setVisibility(View.VISIBLE);
+                mPostThumbnailLink.setText(redditPost.getUrl());
+                mPostThumbnailContainer.setOnClickListener(new LaunchActivityClickListener(context, redditPost, WebActivity.class));
+                break;
+            default:
+                String test = "OH NO!";
+                break;
         }
     }
 

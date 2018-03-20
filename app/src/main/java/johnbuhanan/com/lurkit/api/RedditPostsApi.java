@@ -82,7 +82,7 @@ public class RedditPostsApi {
                                 if (highestResolutionIndex > 2)
                                     highestResolutionIndex = 2; // Keep it average quality.
 
-                                thumbnail = jsonArray
+                                thumbnail = jsonArray // TODO Array Index out of bounds error
                                         .getJSONObject(highestResolutionIndex)
                                         .getString("url");
                             }
