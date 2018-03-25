@@ -2,36 +2,25 @@ package johnbuhanan.com.lurkit.fragments;
 
 
 import android.os.Bundle;
-import android.os.Handler;
 import android.support.v4.app.Fragment;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.support.v7.widget.StaggeredGridLayoutManager;
 import android.view.LayoutInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
-import android.view.animation.AnimationUtils;
-import android.widget.ProgressBar;
-
-import com.android.volley.RequestQueue;
 
 import java.util.ArrayList;
 
 import johnbuhanan.com.lurkit.ItemOffsetDecoration;
 import johnbuhanan.com.lurkit.R;
 import johnbuhanan.com.lurkit.adapters.RecyclerViewAdapter;
-import johnbuhanan.com.lurkit.api.RedditPostsApi;
+import johnbuhanan.com.lurkit.api.RedditPosts.RedditPostsApi;
 import johnbuhanan.com.lurkit.model.RedditPost;
-import johnbuhanan.com.lurkit.network.VolleySingleton;
 
 public class RedditPostsFragment extends Fragment {
 
-    private RedditPostsApi mRedditPostsApi = new RedditPostsApi(getContext());
-
-    private RequestQueue mRequestQueue;
     private RecyclerView mRecyclerView;
     private RecyclerViewAdapter adapter;
 
@@ -46,7 +35,7 @@ public class RedditPostsFragment extends Fragment {
     private int pastVisibleItems, visibleItemCount, totalItemCount;
 
     public interface OnRedditPostsLoadedListener {
-        public void onRedditPostsLoaded(ArrayList<RedditPost> redditPostArrayList);
+        void onRedditPostsLoaded(ArrayList<RedditPost> redditPostArrayList);
     }
 
     public RedditPostsFragment() {
@@ -62,19 +51,16 @@ public class RedditPostsFragment extends Fragment {
     OnRedditPostsLoadedListener onRedditPostsLoadedListener = new OnRedditPostsLoadedListener() {
         @Override
         public void onRedditPostsLoaded(ArrayList<RedditPost> redditPostArrayList) {
-            adapter.notifyItemRangeChanged(0, redditPostArrayList.size());
+            adapter.addRedditPosts(redditPostArrayList);
 
             //handle refresh actions
             mSwipeRefreshLayout.setRefreshing(false);
 
-            if (redditPostArrayList.size() == 25) { // Hacky way to only do animation with first load.
-                Animation animation = AnimationUtils.loadAnimation(getContext(), R.anim.slide_in_left);
-                mRecyclerView.startAnimation(animation);
-            }
-
             mRecyclerView.setVisibility(View.VISIBLE);
         }
     };
+
+    private RedditPostsApi mRedditPostsApi = new RedditPostsApi(getContext(), onRedditPostsLoadedListener);
 
     final SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override
@@ -83,7 +69,7 @@ public class RedditPostsFragment extends Fragment {
             mRecyclerView.setLayoutManager(mLayoutManager);
 
             //setting up the recyclerview with the adapter
-            adapter.refreshData(mRedditPostsApi.refreshRedditPosts(onRedditPostsLoadedListener));
+            mRedditPostsApi.refreshRedditPosts();
             previousTotal = 0;
             mSwipeRefreshLayout.setRefreshing(true);
         }
@@ -112,7 +98,7 @@ public class RedditPostsFragment extends Fragment {
                 if (firstVisibleItems[0] + visibleThreshold >= totalItemCount) {
                     // End has been reached
                     // Do something
-                    mRedditPostsApi.getNextRedditPosts(onRedditPostsLoadedListener);
+                    mRedditPostsApi.getNextRedditPosts();
 
                     loading = true;
                 }
@@ -127,9 +113,6 @@ public class RedditPostsFragment extends Fragment {
 
         mRecyclerView = (RecyclerView) rootView.findViewById(R.id.all_recyclerview);
         mSwipeRefreshLayout = (SwipeRefreshLayout) rootView.findViewById(R.id.swipe_refresh_layout);
-
-        //JSON request
-        mRequestQueue = VolleySingleton.getInstance(getActivity()).getRequestQueue();
 
         ItemOffsetDecoration itemDecoration = new ItemOffsetDecoration(getActivity(), R.dimen.item_offset);
         mRecyclerView.addItemDecoration(itemDecoration);
@@ -152,7 +135,6 @@ public class RedditPostsFragment extends Fragment {
     //Handle actions in toolbar
     @Override
     public boolean onOptionsItemSelected(MenuItem item) {
-
         switch (item.getItemId()) {
             case R.id.action_refresh:
                 onRefreshListener.onRefresh();

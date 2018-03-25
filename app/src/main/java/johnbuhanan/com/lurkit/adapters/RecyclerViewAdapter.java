@@ -21,11 +21,6 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
     public static final int SELF_POST_TYPE = 1;
     public static final int LINK_POST_TYPE = 2;
 
-//    public RecyclerViewAdapter(Context context) {
-//        this.mContext = context;
-//        this.redditPosts = new ArrayList<RedditPost>();
-//    }
-
     public RecyclerViewAdapter(Context context, ArrayList<RedditPost> redditPosts) {
         this.mContext = context;
         this.redditPosts = redditPosts;
@@ -49,10 +44,10 @@ public class RecyclerViewAdapter extends RecyclerView.Adapter<RecyclerView.ViewH
         ((RedditCardViewHolder) viewHolder).bindViewHolder(mContext, redditPost);
     }
 
-    public void refreshData(ArrayList<RedditPost> redditPosts) {
-        this.redditPosts.clear();
-        this.redditPosts = redditPosts;
+    public void addRedditPosts(ArrayList<RedditPost> redditPosts) {
+        this.redditPosts.addAll(redditPosts);
         notifyDataSetChanged();
+//        notifyItemRangeChanged(0, this.redditPosts.size());
     }
 
     @Override
