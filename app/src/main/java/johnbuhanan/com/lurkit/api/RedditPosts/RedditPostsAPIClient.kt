@@ -4,9 +4,9 @@ import retrofit2.Call
 import retrofit2.Retrofit
 import retrofit2.converter.moshi.MoshiConverterFactory
 
-class NewsRestAPI() : NewsAPI {
+class RedditPostsAPIClient() {
 
-    private val redditApi: RedditApi
+    private val redditApi: RedditPostsAPI
 
     init {
         val retrofit = Retrofit.Builder()
@@ -14,10 +14,10 @@ class NewsRestAPI() : NewsAPI {
                 .addConverterFactory(MoshiConverterFactory.create())
                 .build()
 
-        redditApi = retrofit.create(RedditApi::class.java)
+        redditApi = retrofit.create(RedditPostsAPI::class.java)
     }
 
-    override fun getNews(after: String, limit: String): Call<RedditNewsResponse> {
+    fun getNews(after: String, limit: String): Call<RedditPostsResponse> {
         return redditApi.getTop(after, limit)
     }
 }

@@ -15,7 +15,7 @@ import com.hannesdorfmann.swipeback.SwipeBack;
 
 import java.util.ArrayList;
 
-import johnbuhanan.com.lurkit.api.CommentsApi;
+import johnbuhanan.com.lurkit.api.Comments.CommentsManager;
 import johnbuhanan.com.lurkit.R;
 import johnbuhanan.com.lurkit.adapters.CommentAdapter;
 import johnbuhanan.com.lurkit.model.Comment;
@@ -68,14 +68,18 @@ public class DetailsActivity extends AppCompatActivity {
         redditCardViewHolder.mPostDetailsContainer.setOnClickListener(null); // Remove click
         redditCardViewHolder.mPostDetailsContainer.setBackground(null); // Remove ripple animation
 
-        adapter = new CommentAdapter(getApplicationContext(), new CommentsApi(getApplicationContext(), permalink, new OnCommentsLoadedListener() {
+        adapter = new CommentAdapter(getApplicationContext());
+
+        CommentsManager commentsManager = new CommentsManager(getApplicationContext(), permalink, new OnCommentsLoadedListener() {
             @Override
             public void onCommentsLoaded(ArrayList<Comment> commentArrayList) {
-                adapter.notifyDataSetChanged();
+                adapter.addComments(commentArrayList);
                 mSwipeRefreshLayout.setRefreshing(false);
                 mListView.setVisibility(View.VISIBLE);
             }
-        }).fetchComments());
+        });
+
+        commentsManager.fetchComments();
 
         mListView.addHeaderView(mHeader);
         mListView.setAdapter(adapter);
@@ -83,7 +87,7 @@ public class DetailsActivity extends AppCompatActivity {
         mSwipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                ArrayList<Comment> comments = new CommentsApi(getApplicationContext(), permalink, new DetailsActivity.OnCommentsLoadedListener() {
+                new CommentsManager(getApplicationContext(), permalink, new DetailsActivity.OnCommentsLoadedListener() {
                     @Override
                     public void onCommentsLoaded(ArrayList<Comment> commentArrayList) {
                         adapter.clear();

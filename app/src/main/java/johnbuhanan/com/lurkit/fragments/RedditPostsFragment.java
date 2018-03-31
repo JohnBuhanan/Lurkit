@@ -16,7 +16,7 @@ import java.util.ArrayList;
 import johnbuhanan.com.lurkit.ItemOffsetDecoration;
 import johnbuhanan.com.lurkit.R;
 import johnbuhanan.com.lurkit.adapters.RecyclerViewAdapter;
-import johnbuhanan.com.lurkit.api.RedditPosts.RedditPostsApi;
+import johnbuhanan.com.lurkit.api.RedditPosts.RedditPostsManager;
 import johnbuhanan.com.lurkit.model.RedditPost;
 
 public class RedditPostsFragment extends Fragment {
@@ -60,7 +60,7 @@ public class RedditPostsFragment extends Fragment {
         }
     };
 
-    private RedditPostsApi mRedditPostsApi = new RedditPostsApi(getContext(), onRedditPostsLoadedListener);
+    private RedditPostsManager mRedditPostsApi = new RedditPostsManager(onRedditPostsLoadedListener);
 
     final SwipeRefreshLayout.OnRefreshListener onRefreshListener = new SwipeRefreshLayout.OnRefreshListener() {
         @Override

@@ -1,7 +1,5 @@
 package johnbuhanan.com.lurkit.api.RedditPosts;
 
-import android.content.Context;
-
 import java.util.ArrayList;
 import java.util.List;
 
@@ -11,15 +9,13 @@ import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
 
-public class RedditPostsApi implements Callback<RedditNewsResponse> {
+public class RedditPostsManager implements Callback<RedditPostsResponse> {
     public ArrayList<RedditPost> redditPostArrayList = new ArrayList<RedditPost>();
     private String currentAfter;
-    private Context mContext;
-    private static final String ALL_PAGE_URL = "https://www.reddit.com/r/all";
+
     private RedditPostsFragment.OnRedditPostsLoadedListener mOnRedditPostsLoadedListener;
 
-    public RedditPostsApi(Context context, RedditPostsFragment.OnRedditPostsLoadedListener onRedditPostsLoadedListener) {
-        mContext = context;
+    public RedditPostsManager(RedditPostsFragment.OnRedditPostsLoadedListener onRedditPostsLoadedListener) {
         mOnRedditPostsLoadedListener = onRedditPostsLoadedListener;
     }
 
@@ -31,31 +27,31 @@ public class RedditPostsApi implements Callback<RedditNewsResponse> {
     }
 
     public void getNextRedditPosts() {
-        new NewsRestAPI().getNews(currentAfter, "25").enqueue(this);
+        new RedditPostsAPIClient().getNews(currentAfter, "25").enqueue(this);
     }
 
     @Override
-    public void onResponse(Call<RedditNewsResponse> call, Response<RedditNewsResponse> response) {
+    public void onResponse(Call<RedditPostsResponse> call, Response<RedditPostsResponse> response) {
         ArrayList<RedditPost> redditPosts = new ArrayList<RedditPost>();
 
-        RedditNewsResponse redditNewsResponse = response.body();
-        RedditDataResponse redditDataResponse = redditNewsResponse.getData();
+        RedditPostsResponse redditNewsResponse = response.body();
+        RedditPostsResponseData redditDataResponse = redditNewsResponse.getData();
         currentAfter = redditDataResponse.getAfter();
 
-        List<RedditChildrenResponse> redditChildrenResponses = redditDataResponse.getChildren();
+        List<Children> redditChildrenResponses = redditDataResponse.getChildren();
 
-        for (RedditChildrenResponse rcr : redditChildrenResponses) {
-            RedditNewsDataResponse rndr = rcr.getData();
+        for (Children rcr : redditChildrenResponses) {
+            ChildrenData rndr = rcr.getData();
 
             RedditPost redditPost = new RedditPost();
 
             String thumbnail = rndr.getThumbnail();
 
-            RedditPreviewResponse redditPreviewResponse = rndr.getPreview();
+            Preview redditPreviewResponse = rndr.getPreview();
             if (redditPreviewResponse != null) {
-                List<RedditImagesResponse> redditImagesResponses = redditPreviewResponse.getImages();
-                RedditImagesResponse redditImagesResponse = redditImagesResponses.get(0);
-                List<RedditImagesResolutionsResponse> redditImagesResolutionsResponses = redditImagesResponse.getResolutions();
+                List<Image> redditImagesResponses = redditPreviewResponse.getImages();
+                Image redditImagesResponse = redditImagesResponses.get(0);
+                List<Resolutions> redditImagesResolutionsResponses = redditImagesResponse.getResolutions();
                 if (redditImagesResolutionsResponses.size() != 0) {
                     thumbnail = redditImagesResolutionsResponses.get(0).getUrl().trim();
                     thumbnail = thumbnail.replace("&amp;", "&");
@@ -80,7 +76,7 @@ public class RedditPostsApi implements Callback<RedditNewsResponse> {
     }
 
     @Override
-    public void onFailure(Call<RedditNewsResponse> call, Throwable t) {
+    public void onFailure(Call<RedditPostsResponse> call, Throwable t) {
 
     }
 }
