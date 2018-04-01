@@ -2,22 +2,42 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+apply plugin: 'com.android.application'
+apply plugin: 'com.github.triplet.play'
 
 android {
+    signingConfigs {
+        config {
+            keyAlias 'lurkit'
+            keyPassword 'freedom$3'
+            storeFile file('/home/john/Desktop/lurkit_keystore.jks')
+            storePassword 'freedom$3'
+        }
+    }
     compileSdkVersion 27
+    playAccountConfigs {
+        defaultAccountConfig {
+            serviceAccountEmail = 'publishplaystore@api-9015663644305309868-127514.iam.gserviceaccount.com'
+            pk12File = file('key.p12')
+        }
+    }
     defaultConfig {
         applicationId "johnbuhanan.com.lurkit"
         minSdkVersion 21
         targetSdkVersion 27
-        versionCode 3
+        versionCode 4
         versionName "1.1"
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
+        playAccountConfig = playAccountConfigs.defaultAccountConfig
+        signingConfig signingConfigs.config
     }
     buildTypes {
         release {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android.txt'), 'proguard-rules.pro'
         }
+    }
+    productFlavors {
     }
 }
 
@@ -35,8 +55,8 @@ dependencies {
     implementation 'com.github.bumptech.glide:glide:4.6.1'
     annotationProcessor 'com.github.bumptech.glide:compiler:4.6.1'
     compile "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
-    compile "com.squareup.retrofit2:retrofit:2.4.0"
-    compile "com.squareup.retrofit2:converter-moshi:2.4.0"
+    compile 'com.squareup.retrofit2:retrofit:2.4.0'
+    compile 'com.squareup.retrofit2:converter-moshi:2.4.0'
     compile 'com.squareup.okhttp3:logging-interceptor:3.6.0'
 }
 repositories {
