@@ -7,21 +7,15 @@ import com.android.volley.Request;
 import com.android.volley.Response;
 import com.android.volley.VolleyError;
 import com.android.volley.toolbox.JsonArrayRequest;
-import com.squareup.moshi.FromJson;
-import com.squareup.moshi.JsonReader;
-import com.squareup.moshi.ToJson;
 
 import org.json.JSONArray;
 import org.json.JSONObject;
 
 import java.util.ArrayList;
-import java.util.List;
 
 import johnbuhanan.com.lurkit.activities.DetailsActivity;
 import johnbuhanan.com.lurkit.model.Comment;
 import johnbuhanan.com.lurkit.network.VolleySingleton;
-import retrofit2.Call;
-import retrofit2.Callback;
 
 public class CommentsManager {
 
